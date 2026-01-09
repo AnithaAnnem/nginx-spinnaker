@@ -4,4 +4,4 @@ metadata:
   name: nginx
   #namespace: apps
 spec:
-  replicas: 3
+  replicas: REPLICAS
