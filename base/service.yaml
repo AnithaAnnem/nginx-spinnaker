@@ -10,6 +10,17 @@
 #   ports:
 #   - port: 80
 #     targetPort: 80
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: APP_NAME
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: APP_NAME
+#   ports:
+#   - port: 80
+#     targetPort: 80
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,5 +30,5 @@ spec:
   selector:
     app: APP_NAME
   ports:
-  - port: 80
-    targetPort: 80
+  - port: PORT
+    targetPort: PORT
