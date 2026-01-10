@@ -40,8 +40,6 @@ set -e
 ENV=$1
 
 echo "Starting render step"
-pwd
-ls -la
 
 echo "Reading values from parameter.yml"
 
@@ -71,18 +69,25 @@ echo "LIVENESS_PROBE=$LIVENESS_PROBE"
 
 echo "Replacing placeholders in base and overlay manifests..."
 
-find base overlay -type f -name "*.yaml" -exec sed -i \
-  -e "s/APP_NAME/${APP_NAME}/g" \
-  -e "s|IMAGE|${IMAGE}|g" \
-  -e "s/TAG/${TAG}/g" \
-  -e "s/REPLICAS/${REPLICAS}/g" \
-  -e "s/CPU_REQUEST/${CPU_REQUEST}/g" \
-  -e "s/CPU_LIMIT/${CPU_LIMIT}/g" \
-  -e "s/MEMORY_REQUEST/${MEMORY_REQUEST}/g" \
-  -e "s/MEMORY_LIMIT/${MEMORY_LIMIT}/g" \
-  -e "s/PORT/${PORT}/g" \
-  -e "s/READINESS_PROBE/${READINESS_PROBE}/g" \
-  -e "s/LIVENESS_PROBE/${LIVENESS_PROBE}/g" {} +
+# Combine all YAML files into one temporary file
+cat base/deployment.yaml base/service.yaml > /tmp/template.yaml
+
+# Replace placeholders and write to final file
+sed -e "s/APP_NAME/${APP_NAME}/g" \
+    -e "s|IMAGE|${IMAGE}|g" \
+    -e "s/TAG/${TAG}/g" \
+    -e "s/REPLICAS/${REPLICAS}/g" \
+    -e "s/CPU_REQUEST/${CPU_REQUEST}/g" \
+    -e "s/CPU_LIMIT/${CPU_LIMIT}/g" \
+    -e "s/MEMORY_REQUEST/${MEMORY_REQUEST}/g" \
+    -e "s/MEMORY_LIMIT/${MEMORY_LIMIT}/g" \
+    -e "s/PORT/${PORT}/g" \
+    -e "s/READINESS_PROBE/${READINESS_PROBE}/g" \
+    -e "s/LIVENESS_PROBE/${LIVENESS_PROBE}/g" \
+    /tmp/template.yaml > final-manifest.yaml
 
 echo "Render completed successfully"
-exit 0
+echo "Manifest rendered successfully"
+echo ""
+echo "===== Final Manifest ====="
+cat final-manifest.yaml
