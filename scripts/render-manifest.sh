@@ -37,9 +37,22 @@
 #!/bin/sh
 set -e
 
+# ============================
+# Render Manifest Script
+# Usage: ./render-manifest.sh <env>
+# Example: ./render-manifest.sh dev
+# ============================
+
 ENV=$1
 
-echo "Starting render step"
+if [ -z "$ENV" ]; then
+  echo "Usage: $0 <env>"
+  exit 1
+fi
+
+echo "Starting render step for environment: $ENV"
+pwd
+ls -la
 
 echo "Reading values from parameter.yml"
 
@@ -67,12 +80,21 @@ echo "PORT=$PORT"
 echo "READINESS_PROBE=$READINESS_PROBE"
 echo "LIVENESS_PROBE=$LIVENESS_PROBE"
 
-echo "Replacing placeholders in base and overlay manifests..."
+echo "Combining base and overlay manifests..."
 
-# Combine all YAML files into one temporary file
-cat base/deployment.yaml base/service.yaml > /tmp/template.yaml
+# Create a temporary folder to store the combined template
+TMP_TEMPLATE="/tmp/template.yaml"
 
-# Replace placeholders and write to final file
+# Check if overlay exists
+if [ -d "overlay/${ENV}" ] && ls overlay/${ENV}/*.yaml 1> /dev/null 2>&1; then
+  cat base/deployment.yaml base/service.yaml overlay/${ENV}/*.yaml > $TMP_TEMPLATE
+else
+  cat base/deployment.yaml base/service.yaml > $TMP_TEMPLATE
+fi
+
+echo "Replacing placeholders in combined template..."
+
+# Replace all placeholders and write to final manifest
 sed -e "s/APP_NAME/${APP_NAME}/g" \
     -e "s|IMAGE|${IMAGE}|g" \
     -e "s/TAG/${TAG}/g" \
@@ -84,7 +106,7 @@ sed -e "s/APP_NAME/${APP_NAME}/g" \
     -e "s/PORT/${PORT}/g" \
     -e "s/READINESS_PROBE/${READINESS_PROBE}/g" \
     -e "s/LIVENESS_PROBE/${LIVENESS_PROBE}/g" \
-    /tmp/template.yaml > final-manifest.yaml
+    $TMP_TEMPLATE > final-manifest.yaml
 
 echo "Render completed successfully"
 echo "Manifest rendered successfully"
