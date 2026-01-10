@@ -7,17 +7,19 @@ echo "Starting render step"
 pwd
 ls -la
 
-APP_NAME=$(yq e '.appName' parameter.yml)
-IMAGE=$(yq e '.image.repo' parameter.yml)
+echo "Reading values from parameter.yml"
+
+APP_NAME=$(yq e '.app.name' parameter.yml)
+IMAGE=$(yq e '.image.name' parameter.yml)
 TAG=$(yq e '.image.tag' parameter.yml)
-REPLICAS=$(yq e ".replicas.${ENV}" parameter.yml)
+REPLICAS=$(yq e ".app.replicas.${ENV}" parameter.yml)
 
 echo "APP_NAME=$APP_NAME"
 echo "IMAGE=$IMAGE"
 echo "TAG=$TAG"
 echo "REPLICAS=$REPLICAS"
 
-echo "Replacing placeholders..."
+echo "Replacing placeholders in base and overlay manifests..."
 
 find base overlay -type f -name "*.yaml" -exec sed -i \
   -e "s/APP_NAME/${APP_NAME}/g" \
