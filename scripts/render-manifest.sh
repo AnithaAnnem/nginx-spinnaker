@@ -100,9 +100,8 @@ sed -e "s/APP_NAME/${APP_NAME}/g" \
     -e "s/MEMORY_REQUEST/${MEMORY_REQUEST}/g" \
     -e "s/MEMORY_LIMIT/${MEMORY_LIMIT}/g" \
     -e "s/PORT/${PORT}/g" \
-    -e "s/READINESS_PROBE/${READINESS_PROBE}/g" \
-    -e "s/LIVENESS_PROBE/${LIVENESS_PROBE}/g" \
     $TMP_TEMPLATE > final-manifest.yaml
+
 
 echo "Render completed successfully"
 echo "Manifest rendered successfully"
