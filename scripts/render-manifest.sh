@@ -1,3 +1,4 @@
+
 # #!/bin/sh
 # set -e
 
@@ -107,4 +108,7 @@ echo "Render completed successfully"
 echo "Manifest rendered successfully"
 echo ""
 echo "===== Final Manifest ====="
+cat final-manifest.yaml
+
+echo "===== SPINNAKER ARTIFACT ====="
 cat final-manifest.yaml
