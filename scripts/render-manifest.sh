@@ -85,12 +85,8 @@ echo "Combining base and overlay manifests..."
 # Create a temporary folder to store the combined template
 TMP_TEMPLATE="/tmp/template.yaml"
 
-# Check if overlay exists
-if [ -d "overlay/${ENV}" ] && ls overlay/${ENV}/*.yaml 1> /dev/null 2>&1; then
-  cat base/deployment.yaml base/service.yaml overlay/${ENV}/*.yaml > $TMP_TEMPLATE
-else
-  cat base/deployment.yaml base/service.yaml > $TMP_TEMPLATE
-fi
+cat base/service.yaml base/deployment.yaml > $TMP_TEMPLATE
+
 
 echo "Replacing placeholders in combined template..."
 
