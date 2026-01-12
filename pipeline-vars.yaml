@@ -1,0 +1,14 @@
+variables:
+  APP_NAME: {{ .app.name }}
+  REPLICAS_DEV: {{ .app.replicas.dev }}
+  REPLICAS_PROD: {{ .app.replicas.prod }}
+  CPU_REQUEST: {{ .app.cpu.request }}
+  CPU_LIMIT: {{ .app.cpu.limit }}
+  MEMORY_REQUEST: {{ .app.memory.request }}
+  MEMORY_LIMIT: {{ .app.memory.limit }}
+  READINESS_PROBE: {{ .app.readinessProbe }}
+  LIVENESS_PROBE: {{ .app.livenessProbe }}
+
+  IMAGE: {{ .image.name }}
+  TAG: {{ .image.tag }}
+  PORT: {{ .port }}
