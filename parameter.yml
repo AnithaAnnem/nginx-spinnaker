@@ -1,12 +1,4 @@
-# app:
-#   name: nginx
-#   replicas:
-#     dev: 1
-#     prod: 3
 
-# image:
-#   name: nginx
-#   tag: 1.25-alpine
 app:
   name: nginx
   replicas:
