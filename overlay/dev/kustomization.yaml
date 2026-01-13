@@ -7,3 +7,4 @@ resources:
 
 patchesStrategicMerge:
   - replica-patch.yaml
+  - service-patch.yaml
