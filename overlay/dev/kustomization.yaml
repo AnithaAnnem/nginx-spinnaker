@@ -11,7 +11,8 @@ patchesStrategicMerge:
 
 # Reference external variables file instead of defining inline
 varFiles:
-  - ../pipeline-vars.yaml
+  varFiles:
+  - ../../pipeline-vars.yaml  
 
 vars:
   - name: APP_NAME
