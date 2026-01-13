@@ -8,3 +8,21 @@ resources:
 patchesStrategicMerge:
   - replica-patch.yaml
   - service-patch.yaml
+
+# Reference external variables file instead of defining inline
+varFiles:
+  - ../pipeline-vars.yaml
+
+vars:
+  - name: APP_NAME
+  - name: REPLICAS_DEV
+  - name: REPLICAS_PROD
+  - name: CPU_REQUEST
+  - name: CPU_LIMIT
+  - name: MEMORY_REQUEST
+  - name: MEMORY_LIMIT
+  - name: READINESS_PROBE
+  - name: LIVENESS_PROBE
+  - name: IMAGE
+  - name: TAG
+  - name: PORT
