@@ -1,12 +1,23 @@
 
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: APP_NAME
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: APP_NAME
+#   ports:
+#   - port: PORT
+#     targetPort: PORT
 apiVersion: v1
 kind: Service
 metadata:
-  name: APP_NAME
+  name: nginx
 spec:
   type: LoadBalancer
   selector:
-    app: APP_NAME
+    app: nginx
   ports:
-  - port: PORT
-    targetPort: PORT
+  - port: 80
+    targetPort: 80
