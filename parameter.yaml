@@ -1,22 +1,4 @@
 
- # app:
- #   name: nginx
- #   replicas:
- #     dev: 1
- #     prod: 3
- #   cpu:
- #     request: 100m
- #     limit: 200m
- #   memory:
- #     request: 128Mi
- #     limit: 256Mi
- #   readinessProbe: null
- #   livenessProbe: null
- # image:
- #   name: nginx
- #   tag: 1.25-alpine
-
- # port: 80
 APP_NAME: nginx
 REPLICAS_DEV: 1
 REPLICAS_PROD: 3
