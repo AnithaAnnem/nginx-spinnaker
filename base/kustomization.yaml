@@ -5,65 +5,65 @@ resources:
   - deployment.yaml
   - service.yaml
 
-configMapGenerator:
-  - name: app-parameters
-    files:
-      - ../parameter.yaml
+# configMapGenerator:
+#   - name: app-parameters
+#     files:
+#       - ../parameter.yaml
 
-vars:
-  - name: APP_NAME
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.APP_NAME
-  - name: IMAGE
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.IMAGE
-  - name: TAG
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.TAG
-  - name: PORT
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.PORT
-  - name: CPU_REQUEST
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.CPU_REQUEST
-  - name: CPU_LIMIT
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.CPU_LIMIT
-  - name: MEMORY_REQUEST
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.MEMORY_REQUEST
-  - name: MEMORY_LIMIT
-    objref:
-      kind: ConfigMap
-      name: app-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.MEMORY_LIMIT
+# vars:
+#   - name: APP_NAME
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.APP_NAME
+#   - name: IMAGE
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.IMAGE
+#   - name: TAG
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.TAG
+#   - name: PORT
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.PORT
+#   - name: CPU_REQUEST
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.CPU_REQUEST
+#   - name: CPU_LIMIT
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.CPU_LIMIT
+#   - name: MEMORY_REQUEST
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.MEMORY_REQUEST
+#   - name: MEMORY_LIMIT
+#     objref:
+#       kind: ConfigMap
+#       name: app-parameters
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: data.MEMORY_LIMIT
