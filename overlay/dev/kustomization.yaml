@@ -1,13 +1,13 @@
-# apiVersion: kustomize.config.k8s.io/v1beta1
-# kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 
-# resources:
-#   - ../../base
-#   - config.yaml
+resources:
+  - ../../base
+  - config.yaml
 
-# patchesStrategicMerge:
-#   - replica-patch.yaml
-#   - service-patch.yaml
+patchesStrategicMerge:
+  - replica-patch.yaml
+  - service-patch.yaml
 
 # replacements:
 #   - source:
@@ -94,14 +94,6 @@
 #           - spec.template.spec.containers.0.resources.limits.memory
 
 
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
 
-resources:
-  - ../../base
-  - config.yaml
-
-patchesStrategicMerge:
-  - replica-patch.yaml
   - service-patch.yaml
 
