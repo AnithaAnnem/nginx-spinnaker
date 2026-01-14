@@ -25,22 +25,8 @@
 #         ports:
 #         - containerPort: ${PORT}
 apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx
+kind: Deployment 
+metadata: 
+ name: nginx 
 spec:
-  replicas: 2
-  template:
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:latest
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
-        ports:
-        - containerPort: 8080
+ replicas: REPLICAS
