@@ -1,3 +1,99 @@
+# apiVersion: kustomize.config.k8s.io/v1beta1
+# kind: Kustomization
+
+# resources:
+#   - ../../base
+#   - config.yaml
+
+# patchesStrategicMerge:
+#   - replica-patch.yaml
+#   - service-patch.yaml
+
+# replacements:
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.port
+#     targets:
+#       - select:
+#           kind: Service
+#           name: nginx
+#         fieldpaths:
+#           - spec.ports.0.port
+#           - spec.ports.0.targetPort
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.template.spec.containers.0.ports.0.containerPort
+
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.replicas
+#     targets:
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.replicas
+
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.image
+#     targets:
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.template.spec.containers.0.image
+
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.cpu-request
+#     targets:
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.template.spec.containers.0.resources.requests.cpu
+
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.cpu-limit
+#     targets:
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.template.spec.containers.0.resources.limits.cpu
+
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.memory-request
+#     targets:
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.template.spec.containers.0.resources.requests.memory
+
+#   - source:
+#       kind: ConfigMap
+#       name: nginx-config
+#       fieldpath: data.memory-limit
+#     targets:
+#       - select:
+#           kind: Deployment
+#           name: nginx
+#         fieldpaths:
+#           - spec.template.spec.containers.0.resources.limits.memory
+
+
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -9,86 +105,41 @@ patchesStrategicMerge:
   - replica-patch.yaml
   - service-patch.yaml
 
-replacements:
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.port
-    targets:
-      - select:
-          kind: Service
-          name: nginx
-        fieldpaths:
-          - spec.ports.0.port
-          - spec.ports.0.targetPort
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.template.spec.containers.0.ports.0.containerPort
-
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.replicas
-    targets:
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.replicas
-
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.image
-    targets:
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.template.spec.containers.0.image
-
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.cpu-request
-    targets:
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.template.spec.containers.0.resources.requests.cpu
-
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.cpu-limit
-    targets:
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.template.spec.containers.0.resources.limits.cpu
-
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.memory-request
-    targets:
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.template.spec.containers.0.resources.requests.memory
-
-  - source:
-      kind: ConfigMap
-      name: nginx-config
-      fieldpath: data.memory-limit
-    targets:
-      - select:
-          kind: Deployment
-          name: nginx
-        fieldpaths:
-          - spec.template.spec.containers.0.resources.limits.memory
+# Replace the 'replacements' section with patchesJson6902
+patchesJson6902:
+  - target:
+      kind: Service
+      name: nginx
+    patch: |-
+      - op: replace
+        path: /spec/ports/0/port
+        value: "8080"
+      - op: replace
+        path: /spec/ports/0/targetPort
+        value: "8080"
+  
+  - target:
+      kind: Deployment
+      name: nginx
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: "nginx:latest"
+      - op: replace
+        path: /spec/template/spec/containers/0/ports/0/containerPort
+        value: "8080"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "100m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "500m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "128Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "256Mi"
