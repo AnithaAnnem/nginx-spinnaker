@@ -3,11 +3,11 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - config.yaml
+  
 
 patchesStrategicMerge:
   - replica-patch.yaml
-  - service-patch.yaml
+
 
 # replacements:
 #   - source:
