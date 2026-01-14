@@ -1,29 +1,4 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: ${APP_NAME}
-# spec:
-#   replicas: ${REPLICAS_DEV}
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: nginx   # must match base
-# spec:
-#   replicas: ${REPLICAS_DEV}
-#   template:
-#     spec:
-#       containers:
-#       - name: nginx
-#         image: ${IMAGE}:${TAG}
-#         resources:
-#           requests:
-#             cpu: ${CPU_REQUEST}
-#             memory: ${MEMORY_REQUEST}
-#           limits:
-#             cpu: ${CPU_LIMIT}
-#             memory: ${MEMORY_LIMIT}
-#         ports:
-#         - containerPort: ${PORT}
+
 apiVersion: apps/v1
 kind: Deployment 
 metadata: 
