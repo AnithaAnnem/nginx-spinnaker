@@ -1,7 +1,6 @@
-
 apiVersion: apps/v1
-kind: Deployment 
-metadata: 
- name: APP_NAME
+kind: Deployment
+metadata:
+  name: $(APP_NAME)
 spec:
- replicas: REPLICAS
+  replicas: 1
