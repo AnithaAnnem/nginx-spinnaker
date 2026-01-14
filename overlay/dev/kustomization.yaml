@@ -3,27 +3,92 @@ kind: Kustomization
 
 resources:
   - ../../base
-  
+  - config.yaml
 
 patchesStrategicMerge:
   - replica-patch.yaml
   - service-patch.yaml
 
-# Reference external variables file instead of defining inline
-varFiles:
-  varFiles:
-  - ../../pipeline-vars.yaml  
+replacements:
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.port
+    targets:
+      - select:
+          kind: Service
+          name: nginx
+        fieldpaths:
+          - spec.ports.0.port
+          - spec.ports.0.targetPort
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.template.spec.containers.0.ports.0.containerPort
 
-vars:
-  - name: APP_NAME
-  - name: REPLICAS_DEV
-  - name: REPLICAS_PROD
-  - name: CPU_REQUEST
-  - name: CPU_LIMIT
-  - name: MEMORY_REQUEST
-  - name: MEMORY_LIMIT
-  - name: READINESS_PROBE
-  - name: LIVENESS_PROBE
-  - name: IMAGE
-  - name: TAG
-  - name: PORT
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.replicas
+
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.template.spec.containers.0.image
+
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.cpu-request
+    targets:
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.template.spec.containers.0.resources.requests.cpu
+
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.cpu-limit
+    targets:
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.template.spec.containers.0.resources.limits.cpu
+
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.memory-request
+    targets:
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.template.spec.containers.0.resources.requests.memory
+
+  - source:
+      kind: ConfigMap
+      name: nginx-config
+      fieldpath: data.memory-limit
+    targets:
+      - select:
+          kind: Deployment
+          name: nginx
+        fieldpaths:
+          - spec.template.spec.containers.0.resources.limits.memory

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  app-name: "nginx"
+  replicas: "2"
+  image: "nginx:latest"  # Combined image:tag
+  port: "8080"
+  cpu-request: "100m"
+  cpu-limit: "500m"
+  memory-request: "128Mi"
+  memory-limit: "256Mi"
