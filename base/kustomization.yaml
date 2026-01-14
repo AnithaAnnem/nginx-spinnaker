@@ -1,3 +1,76 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 resources:
   - deployment.yaml
   - service.yaml
+
+configMapGenerator:
+  - name: app-parameters
+    literals:
+      - APP_NAME=nginx
+      - IMAGE=nginx
+      - TAG=1.25-alpine
+      - PORT=80
+      - CPU_REQUEST=100m
+      - CPU_LIMIT=200m
+      - MEMORY_REQUEST=128Mi
+      - MEMORY_LIMIT=256Mi
+
+vars:
+  - name: APP_NAME
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.APP_NAME
+  - name: IMAGE
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.IMAGE
+  - name: TAG
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.TAG
+  - name: PORT
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.PORT
+  - name: CPU_REQUEST
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.CPU_REQUEST
+  - name: CPU_LIMIT
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.CPU_LIMIT
+  - name: MEMORY_REQUEST
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.MEMORY_REQUEST
+  - name: MEMORY_LIMIT
+    objref:
+      kind: ConfigMap
+      name: app-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.MEMORY_LIMIT
