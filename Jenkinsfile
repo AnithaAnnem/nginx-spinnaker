@@ -16,7 +16,7 @@ pipeline {
       steps {
         checkout([$class: 'GitSCM',
           branches: [[name: "*/${params.GIT_REF}"]],
-          userRemoteConfigs: [[url: 'git@your-repo:nginx-spinnaker.git']]
+          userRemoteConfigs: [[url: 'https://github.com/AnithaAnnem/nginx-spinnaker.git']]
         ])
       }
     }
@@ -24,15 +24,14 @@ pipeline {
     stage('Read parameters') {
       steps {
         script {
-          def paramsYaml = readFile("${env.WORKDIR}/parameter.yaml")
-          // Parse YAML to map
-          def y = new org.yaml.snakeyaml.Yaml().load(paramsYaml)
+          // Use Jenkins Pipeline Utility Steps plugin
+          def y = readYaml file: "${env.WORKDIR}/parameter.yaml"
 
           // Export as env vars
           y.each { k, v -> env[k] = v.toString() }
 
           // Derive REPLICAS based on ENV
-          env.REPLICAS = (params.ENV == 'prod') ? env.REPLICAS_PROD : env.REPLICAS_DEV
+          env.REPLICAS = (params.ENV == 'prod') ? env.REPLICAS_PROD.toString() : env.REPLICAS_DEV.toString()
         }
       }
     }
@@ -41,7 +40,6 @@ pipeline {
       steps {
         script {
           def tpl = readFile("${env.WORKDIR}/pipeline-vars.yaml")
-          // Simple token replacement: ${KEY} -> env[KEY]
           def rendered = tpl.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
             return env[key] ?: ''
           }
@@ -54,8 +52,9 @@ pipeline {
     stage('Replace placeholders in manifests') {
       steps {
         script {
-          // Replace placeholders in base and overlay files
-          def files = sh(script: "find ${env.WORKDIR} -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
+          // Work on a copy instead of overwriting source
+          sh "cp -r ${env.WORKDIR} ${env.DISTDIR}/workdir"
+          def files = sh(script: "find ${env.DISTDIR}/workdir -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
           files.each { f ->
             def content = readFile(f)
             def replaced = content.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
@@ -70,29 +69,25 @@ pipeline {
     stage('Bake with kustomize') {
       steps {
         sh """
-          cd ${WORKDIR}/overlay/${ENV}
-          kustomize build . > ../../${DISTDIR}/manifests.yaml
+          cd ${DISTDIR}/workdir/overlay/${ENV}
+          kustomize build . > ../../manifests.yaml
         """
       }
     }
 
     stage('Publish artifact to Spinnaker') {
       steps {
-        // Example: archive or push to artifact store Spinnaker can read
         archiveArtifacts artifacts: "${DISTDIR}/manifests.yaml", fingerprint: true
       }
     }
 
     stage('Trigger Spinnaker') {
       steps {
-        // Use your Spinnaker/Jenkins integration (e.g., spinnaker stage or webhook)
-        // Option A: Jenkins Spinnaker plugin
-        // Option B: curl webhook to Spinnaker with artifact reference
         sh """
           curl -X POST -H 'Content-Type: application/json' \\
             -d '{
               "env": "${params.ENV}",
-              "artifactPath": "${env.WORKDIR}/${env.DISTDIR}/manifests.yaml",
+              "artifactPath": "${env.DISTDIR}/manifests.yaml",
               "appName": "${env.APP_NAME}"
             }' \\
             https://spinnaker.example.com/webhooks/bake-deploy
