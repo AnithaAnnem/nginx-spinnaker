@@ -74,8 +74,8 @@ pipeline {
     stage('Bake with kustomize') {
       steps {
         sh """
-          cd overlay/${params.ENV}
-          kustomize build . > ../${env.DISTDIR}/manifests.yaml
+          mkdir -p ${env.DISTDIR}
+          kustomize build overlay/${params.ENV} > ${env.DISTDIR}/manifests.yaml
         """
       }
     }
