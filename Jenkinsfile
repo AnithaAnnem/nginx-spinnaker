@@ -58,7 +58,12 @@ pipeline {
       steps {
         script {
           withEnv(env.BUILD_ENV_LIST.readLines()) {
-            def files = sh(script: "find . -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
+            // Replace placeholders in base and overlay manifests
+            def files = sh(
+              script: "find base overlay -type f -name '*.yaml' -o -name '*.yml'",
+              returnStdout: true
+            ).trim().split('\n')
+
             files.each { f ->
               def content = readFile(f)
               def replaced = content.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
@@ -88,15 +93,19 @@ pipeline {
 
     stage('Trigger Spinnaker') {
       steps {
-        sh """
-          curl -X POST -H 'Content-Type: application/json' \\
-            -d '{
-              "env": "${params.ENV}",
-              "artifactPath": "${env.DISTDIR}/manifests.yaml",
-              "appName": "${env.APP_NAME}"
-            }' \\
-            https://spinnaker.example.com/webhooks/bake-deploy
-        """
+        script {
+          withEnv(env.BUILD_ENV_LIST.readLines()) {
+            sh """
+              curl -X POST -H 'Content-Type: application/json' \\
+                -d '{
+                  "env": "${params.ENV}",
+                  "artifactPath": "${env.DISTDIR}/manifests.yaml",
+                  "appName": "${env.APP_NAME}"
+                }' \\
+                https://spinnaker.example.com/webhooks/bake-deploy
+            """
+          }
+        }
       }
     }
   }
