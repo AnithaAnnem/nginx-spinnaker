@@ -23,14 +23,18 @@ pipeline {
     stage('Read parameters') {
       steps {
         script {
-          // Use Pipeline Utility Steps plugin
           def y = readYaml file: "parameter.yaml"
 
-          // Export as env vars
-          y.each { k, v -> env[k] = v.toString() }
+          // Build env list safely
+          def envList = []
+          y.each { k, v -> envList << "${k}=${v}" }
 
-          // Derive REPLICAS based on ENV
-          env.REPLICAS = (params.ENV == 'prod') ? env.REPLICAS_PROD.toString() : env.REPLICAS_DEV.toString()
+          // Derive REPLICAS
+          def replicas = (params.ENV == 'prod') ? y.REPLICAS_PROD.toString() : y.REPLICAS_DEV.toString()
+          envList << "REPLICAS=${replicas}"
+
+          // Wrap later stages with these env vars
+          env.BUILD_ENV_LIST = envList.join(',')
         }
       }
     }
@@ -38,12 +42,14 @@ pipeline {
     stage('Render pipeline-vars.yaml') {
       steps {
         script {
-          def tpl = readFile("pipeline-vars.yaml")
-          def rendered = tpl.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
-            return env[key] ?: ''
+          withEnv(env.BUILD_ENV_LIST.split(',')) {
+            def tpl = readFile("pipeline-vars.yaml")
+            def rendered = tpl.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
+              return env[key] ?: ''
+            }
+            sh "mkdir -p ${env.DISTDIR}"
+            writeFile file: "${env.DISTDIR}/pipeline-vars.rendered.yaml", text: rendered
           }
-          sh "mkdir -p ${env.DISTDIR}"
-          writeFile file: "${env.DISTDIR}/pipeline-vars.rendered.yaml", text: rendered
         }
       }
     }
@@ -51,15 +57,15 @@ pipeline {
     stage('Replace placeholders in manifests') {
       steps {
         script {
-          // Work on a copy instead of overwriting source
-          sh "cp -r . ${env.DISTDIR}/workdir"
-          def files = sh(script: "find ${env.DISTDIR}/workdir -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
-          files.each { f ->
-            def content = readFile(f)
-            def replaced = content.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
-              return env[key] ?: ''
+          withEnv(env.BUILD_ENV_LIST.split(',')) {
+            def files = sh(script: "find . -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
+            files.each { f ->
+              def content = readFile(f)
+              def replaced = content.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
+                return env[key] ?: ''
+              }
+              writeFile file: f, text: replaced
             }
-            writeFile file: f, text: replaced
           }
         }
       }
@@ -68,8 +74,8 @@ pipeline {
     stage('Bake with kustomize') {
       steps {
         sh """
-          cd ${DISTDIR}/workdir/overlay/${ENV}
-          kustomize build . > ../../manifests.yaml
+          cd overlay/${params.ENV}
+          kustomize build . > ../${env.DISTDIR}/manifests.yaml
         """
       }
     }
