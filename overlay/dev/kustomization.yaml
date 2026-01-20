@@ -3,9 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../base
-  
 
-patchesStrategicMerge:
-  - replica-patch.yaml
-
-
+patches:
+  - path: replica-patch.yaml
