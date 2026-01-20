@@ -33,8 +33,8 @@ pipeline {
           def replicas = (params.ENV == 'prod') ? y.REPLICAS_PROD.toString() : y.REPLICAS_DEV.toString()
           envList << "REPLICAS=${replicas}"
 
-          // Wrap later stages with these env vars
-          env.BUILD_ENV_LIST = envList.join(',')
+          // Save for later stages
+          env.BUILD_ENV_LIST = envList.join('\n')
         }
       }
     }
@@ -42,7 +42,7 @@ pipeline {
     stage('Render pipeline-vars.yaml') {
       steps {
         script {
-          withEnv(env.BUILD_ENV_LIST.split(',')) {
+          withEnv(env.BUILD_ENV_LIST.readLines()) {
             def tpl = readFile("pipeline-vars.yaml")
             def rendered = tpl.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
               return env[key] ?: ''
@@ -57,7 +57,7 @@ pipeline {
     stage('Replace placeholders in manifests') {
       steps {
         script {
-          withEnv(env.BUILD_ENV_LIST.split(',')) {
+          withEnv(env.BUILD_ENV_LIST.readLines()) {
             def files = sh(script: "find . -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
             files.each { f ->
               def content = readFile(f)
