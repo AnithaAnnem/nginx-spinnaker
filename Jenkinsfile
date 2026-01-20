@@ -7,7 +7,6 @@ pipeline {
   }
 
   environment {
-    WORKDIR = 'nginx-spinnaker'
     DISTDIR = 'dist'
   }
 
@@ -24,8 +23,8 @@ pipeline {
     stage('Read parameters') {
       steps {
         script {
-          // Use Jenkins Pipeline Utility Steps plugin
-          def y = readYaml file: "${env.WORKDIR}/parameter.yaml"
+          // Use Pipeline Utility Steps plugin
+          def y = readYaml file: "parameter.yaml"
 
           // Export as env vars
           y.each { k, v -> env[k] = v.toString() }
@@ -39,7 +38,7 @@ pipeline {
     stage('Render pipeline-vars.yaml') {
       steps {
         script {
-          def tpl = readFile("${env.WORKDIR}/pipeline-vars.yaml")
+          def tpl = readFile("pipeline-vars.yaml")
           def rendered = tpl.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
             return env[key] ?: ''
           }
@@ -53,7 +52,7 @@ pipeline {
       steps {
         script {
           // Work on a copy instead of overwriting source
-          sh "cp -r ${env.WORKDIR} ${env.DISTDIR}/workdir"
+          sh "cp -r . ${env.DISTDIR}/workdir"
           def files = sh(script: "find ${env.DISTDIR}/workdir -type f -name '*.yaml' -o -name '*.yml'", returnStdout: true).trim().split('\n')
           files.each { f ->
             def content = readFile(f)
