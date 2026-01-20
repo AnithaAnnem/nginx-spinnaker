@@ -25,15 +25,12 @@ pipeline {
         script {
           def y = readYaml file: "parameter.yaml"
 
-          // Build env list safely
           def envList = []
           y.each { k, v -> envList << "${k}=${v}" }
 
-          // Derive REPLICAS
           def replicas = (params.ENV == 'prod') ? y.REPLICAS_PROD.toString() : y.REPLICAS_DEV.toString()
           envList << "REPLICAS=${replicas}"
 
-          // Save for later stages
           env.BUILD_ENV_LIST = envList.join('\n')
         }
       }
@@ -44,7 +41,7 @@ pipeline {
         script {
           withEnv(env.BUILD_ENV_LIST.readLines()) {
             def tpl = readFile("pipeline-vars.yaml")
-            def rendered = tpl.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
+            def rendered = tpl.replaceAll(/\$\{([A-Za-z0-9_]+)\}/) { all, key ->
               return env[key] ?: ''
             }
             sh "mkdir -p ${env.DISTDIR}"
@@ -58,15 +55,14 @@ pipeline {
       steps {
         script {
           withEnv(env.BUILD_ENV_LIST.readLines()) {
-            // Replace placeholders in base and overlay manifests
             def files = sh(
-              script: "find base overlay -type f -name '*.yaml' -o -name '*.yml'",
+              script: "find base overlay -type f \\( -name '*.yaml' -o -name '*.yml' \\)",
               returnStdout: true
             ).trim().split('\n')
 
             files.each { f ->
               def content = readFile(f)
-              def replaced = content.replaceAll(/\$\{([A-Z0-9_]+)\}/) { all, key ->
+              def replaced = content.replaceAll(/\$\{([A-Za-z0-9_]+)\}/) { all, key ->
                 return env[key] ?: ''
               }
               writeFile file: f, text: replaced
@@ -100,7 +96,7 @@ pipeline {
                 -d '{
                   "env": "${params.ENV}",
                   "artifactPath": "${env.DISTDIR}/manifests.yaml",
-                  "appName": "${env.APP_NAME}"
+                  "appName": "${APP_NAME}"
                 }' \\
                 https://spinnaker.example.com/webhooks/bake-deploy
             """
