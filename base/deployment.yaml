@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ${APP_NAME}
-          image: ${IMAGE}:${TAG}
+          image: "${IMAGE}:${TAG}"
           ports:
             - containerPort: ${PORT}
           resources:
