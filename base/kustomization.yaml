@@ -4,19 +4,3 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-
-vars:
-  - name: APP_NAME
-    objref:
-      kind: Service
-      apiVersion: v1
-      name: nginx
-    fieldref:
-      fieldpath: metadata.name
-  - name: PORT
-    objref:
-      kind: Deployment
-      apiVersion: apps/v1
-      name: nginx
-    fieldref:
-      fieldpath: spec.template.spec.containers[0].ports[0].containerPort
