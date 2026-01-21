@@ -207,7 +207,7 @@ pipeline {
                   "artifactPath": "${env.DISTDIR}/manifests.yaml",
                   "appName": "nginx"
                 }' \\
-                http://a087ad36c3d76425bae67bed20bfb2ae-566811935.us-east-1.elb.amazonaws.com:8084/webhooks/bake-deploy
+                http://a45b1eea2d94d40d6afa2e1cfdaca2f9-317157311.us-east-1.elb.amazonaws.com/webhooks/bake-deploy
             """
           }
         }
