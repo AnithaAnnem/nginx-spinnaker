@@ -126,7 +126,9 @@ pipeline {
         checkout([
           $class: 'GitSCM',
           branches: [[name: "*/${params.GIT_REF}"]],
-          userRemoteConfigs: [[url: 'https://github.com/AnithaAnnem/nginx-spinnaker.git']]
+          userRemoteConfigs: [[
+            url: 'https://github.com/AnithaAnnem/nginx-spinnaker.git'
+          ]]
         ])
       }
     }
@@ -136,7 +138,7 @@ pipeline {
         script {
           def paramsYaml = readYaml file: 'parameter.yaml'
 
-          // Export ALL parameters as ENV vars
+          // Export all parameters as environment variables
           paramsYaml.each { k, v ->
             env[k.toString()] = v.toString()
           }
@@ -147,6 +149,10 @@ pipeline {
           } else {
             env.REPLICAS = env.REPLICAS_DEV
           }
+
+          echo "ENV=${params.ENV}"
+          echo "APP_NAME=${env.APP_NAME}"
+          echo "REPLICAS=${env.REPLICAS}"
         }
       }
     }
@@ -177,32 +183,42 @@ pipeline {
 
     stage('Validate placeholders') {
       steps {
-        sh """
-          if grep -R '\\${' base overlay; then
-            echo '❌ ERROR: Unresolved placeholders found'
+        sh '''
+          echo "🔍 Validating unresolved placeholders..."
+          if grep -R '\${' base overlay; then
+            echo "❌ ERROR: Unresolved placeholders found"
             exit 1
           fi
-        """
+          echo "✅ All placeholders resolved"
+        '''
       }
     }
 
     stage('Bake with kustomize') {
       steps {
-        sh """
-          mkdir -p ${DISTDIR}
-          kustomize build overlay/${params.ENV} > ${DISTDIR}/manifests.yaml
-        """
+        sh '''
+          mkdir -p dist
+          kustomize build overlay/${ENV} > dist/manifests.yaml
+        '''
       }
     }
 
     stage('Publish artifact to Spinnaker') {
       steps {
-        archiveArtifacts artifacts: "${DISTDIR}/manifests.yaml", fingerprint: true
+        archiveArtifacts artifacts: 'dist/manifests.yaml', fingerprint: true
       }
     }
   }
 
-
+  post {
+    success {
+      echo "✅ Pipeline completed successfully"
+    }
+    failure {
+      echo "❌ Pipeline failed"
+    }
+  }
+}
 
 
 
