@@ -4,4 +4,72 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-  - pipeline-vars.yaml
+  - configmap-vars.yaml
+
+vars:
+  - name: APP_NAME
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.APP_NAME
+
+  - name: IMAGE
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.IMAGE
+
+  - name: TAG
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.TAG
+
+  - name: PORT
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.PORT
+
+  - name: REQ_CPU
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.REQ_CPU
+
+  - name: REQ_MEM
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.REQ_MEM
+
+  - name: LIM_CPU
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.LIM_CPU
+
+  - name: LIM_MEM
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.LIM_MEM
+
+configurations:
+  - kustomizeconfig.yaml
