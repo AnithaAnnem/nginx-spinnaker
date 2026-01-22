@@ -11,7 +11,7 @@ data:
   REQ_MEM: 128Mi
   LIM_CPU: 200m
   LIM_MEM: 256Mi
-  PORT: 80
+  PORT: "80"
   REPLICAS_DEV: "1"
   REPLICAS_PROD: "3"
   READINESS_PATH: /healthz
