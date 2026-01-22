@@ -8,6 +8,6 @@ spec:
     app: $(APP_NAME)
   ports:
     - name: http
-      port: $(PORT)
+      port: 80
       targetPort: $(PORT)
       protocol: TCP
