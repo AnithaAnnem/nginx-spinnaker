@@ -3,4 +3,4 @@ kind: Deployment
 metadata:
   name: $(APP_NAME)
 spec:
-  replicas: $(REPLICAS_DEV)
+  replicas: 1
