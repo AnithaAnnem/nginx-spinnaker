@@ -5,7 +5,7 @@ metadata:
   labels:
     app: $(APP_NAME)
 spec:
-  replicas: $(REPLICAS)
+  replicas: $(REPLICAS_DEV)  
   selector:
     matchLabels:
       app: $(APP_NAME)
@@ -21,9 +21,8 @@ spec:
             - containerPort: $(PORT)
           resources:
             requests:
-              cpu: $(CPU_REQUEST)
-              memory: $(MEMORY_REQUEST)
+              cpu: $(REQ_CPU)
+              memory: $(REQ_MEM)
             limits:
-              cpu: $(CPU_LIMIT)
-              memory: $(MEMORY_LIMIT)
-
+              cpu: $(LIM_CPU)
+              memory: $(LIM_MEM)
