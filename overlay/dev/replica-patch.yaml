@@ -1,12 +1,6 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: ${APP_NAME}
-# spec:
-#   replicas: ${REPLICAS_DEV}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: ${APP_NAME}
 spec:
   replicas: ${REPLICAS_DEV}
