@@ -1,0 +1,29 @@
+varReference:
+  - path: metadata/name
+    kind: Deployment
+  - path: metadata/labels/app
+    kind: Deployment
+  - path: spec/selector/matchLabels/app
+    kind: Deployment
+  - path: spec/template/metadata/labels/app
+    kind: Deployment
+  - path: spec/template/spec/containers[]/name
+    kind: Deployment
+  - path: spec/template/spec/containers[]/image
+    kind: Deployment
+  - path: spec/template/spec/containers[]/ports[]/containerPort
+    kind: Deployment
+  - path: spec/template/spec/containers[]/resources/requests/cpu
+    kind: Deployment
+  - path: spec/template/spec/containers[]/resources/requests/memory
+    kind: Deployment
+  - path: spec/template/spec/containers[]/resources/limits/cpu
+    kind: Deployment
+  - path: spec/template/spec/containers[]/resources/limits/memory
+    kind: Deployment
+  - path: metadata/name
+    kind: Service
+  - path: spec/selector/app
+    kind: Service
+  - path: spec/ports[]/targetPort
+    kind: Service
