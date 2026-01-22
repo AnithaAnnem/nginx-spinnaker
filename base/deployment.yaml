@@ -18,7 +18,7 @@ spec:
         - name: $(APP_NAME)
           image: "$(IMAGE):$(TAG)"
           ports:
-            - containerPort: 80
+            - containerPort: $(PORT)
           resources:
             requests:
               cpu: $(REQ_CPU)
