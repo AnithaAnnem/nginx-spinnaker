@@ -34,7 +34,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  replicas: ${REPLICAS}
+  replicas: ${REPLICAS_DEV}   
   selector:
     matchLabels:
       app: nginx
