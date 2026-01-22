@@ -25,5 +25,3 @@ varReference:
     kind: Service
   - path: spec/selector/app
     kind: Service
-  - path: spec/ports[]/targetPort
-    kind: Service
