@@ -5,7 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - configmap-vars.yaml
-   - ingress.yaml
+  - ingress.yaml
 
 
 vars:
