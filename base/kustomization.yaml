@@ -5,6 +5,8 @@ resources:
   - deployment.yaml
   - service.yaml
   - configmap-vars.yaml
+   - ingress.yaml
+
 
 vars:
   - name: APP_NAME
