@@ -25,3 +25,13 @@ varReference:
     kind: Service
   - path: spec/selector/app
     kind: Service
+  - path: metadata/name
+    kind: Ingress
+  - path: metadata/namespace
+    kind: Ingress
+  - path: spec/rules[]/host
+    kind: Ingress
+  - path: spec/rules[]/http/paths[]/backend/service/name
+    kind: Ingress
+  - path: spec/rules[]/http/paths[]/backend/service/port/number
+    kind: Ingress
