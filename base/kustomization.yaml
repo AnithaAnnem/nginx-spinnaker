@@ -81,13 +81,13 @@ vars:
     fieldref:
       fieldpath: data.NAMESPACE
 
-- name: HOST
-  objref:
-    kind: ConfigMap
-    name: app-vars
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.HOST
+  - name: HOST
+    objref:
+      kind: ConfigMap
+      name: app-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.HOST
 
 configurations:
   - kustomizeconfig.yaml
