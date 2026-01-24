@@ -1,7 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: $(APP_NAME)-ingress
+  name: nginx-ingress
 spec:
   rules:
-    - host: dev.$(HOST)
+    - host: dev.nginx.example.com
+
