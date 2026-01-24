@@ -16,3 +16,4 @@ data:
   REPLICAS_PROD: "3"
   READINESS_PATH: /healthz
   LIVENESS_PATH: /livez
+  HOST: nginx.example.com 
