@@ -8,3 +8,4 @@ MEMORY_LIMIT: 256Mi
 IMAGE: nginx
 TAG: 1.25-alpine
 PORT: 80
+HOST: nginx.example.com
