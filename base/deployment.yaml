@@ -1,29 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $(APP_NAME)
+  name: ${parameters.APP_NAME}
   labels:
-    app: $(APP_NAME)
+    app: ${parameters.APP_NAME}
 spec:
-  replicas: 1
+  replicas: ${parameters.REPLICAS}
   selector:
     matchLabels:
-      app: $(APP_NAME)
+      app: ${parameters.APP_NAME}
   template:
     metadata:
       labels:
-        app: $(APP_NAME)
+        app: ${parameters.APP_NAME}
     spec:
       containers:
-        - name: $(APP_NAME)
-          image: "$(IMAGE):$(TAG)"
+        - name: ${parameters.APP_NAME}
+          image: ${parameters.IMAGE}:${parameters.TAG}
           ports:
-            - name: http 
-              containerPort: 80
+            - name: http
+              containerPort: ${parameters.PORT}
           resources:
             requests:
-              cpu: $(REQ_CPU)
-              memory: $(REQ_MEM)
+              cpu: ${parameters.CPU_REQUEST}
+              memory: ${parameters.MEMORY_REQUEST}
             limits:
-              cpu: $(LIM_CPU)
-              memory: $(LIM_MEM)
+              cpu: ${parameters.CPU_LIMIT}
+              memory: ${parameters.MEMORY_LIMIT}
+          readinessProbe:
+            httpGet:
+              path: ${parameters.READINESS_PATH}
+              port: ${parameters.PORT}
+          livenessProbe:
+            httpGet:
+              path: ${parameters.LIVENESS_PATH}
+              port: ${parameters.PORT}
