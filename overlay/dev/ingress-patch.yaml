@@ -1,26 +1,7 @@
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: nginx-ingress
-#   namespace: spinnaker
-# spec:
-#   rules:
-#     - host: dev.nginx.example.com
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress
-  namespace: spinnaker
+  name: ${parameters.APP_NAME}-ingress
 spec:
   rules:
-    - host: cloudninja.live
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: nginx
-                port:
-                  number: 80
+  - host: ${parameters.HOST} 
