@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${parameters.APP_NAME}-ingress
+  name: ${APP_NAME}-ingress
 spec:
   rules:
-  - host: ${parameters.HOST} 
+  - host: ${HOST}
