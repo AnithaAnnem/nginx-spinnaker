@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: $(APP_NAME)
-  namespace: default
+  name: ${parameters.APP_NAME}
+  namespace: ${parameters.NAMESPACE}
 spec:
-  type: LoadBalancer
+  type: ${parameters.SERVICE_TYPE}
   selector:
-    app: $(APP_NAME)
+    app: ${parameters.APP_NAME}
   ports:
     - name: http
-      port: 80
+      port: ${parameters.SERVICE_PORT}
       targetPort: http
       protocol: TCP
