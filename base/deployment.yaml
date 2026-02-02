@@ -27,11 +27,11 @@ spec:
             limits:
               cpu: ${CPU_LIMIT}
               memory: ${MEMORY_LIMIT}
-          readinessProbe:
-            httpGet:
-              path: ${READINESS_PATH}
-              port: ${PORT}
-          livenessProbe:
-            httpGet:
-              path: ${LIVENESS_PATH}
-              port: ${PORT}
+          # readinessProbe:
+          #   httpGet:
+          #     path: ${READINESS_PATH}
+          #     port: ${PORT}
+          # livenessProbe:
+          #   httpGet:
+          #     path: ${LIVENESS_PATH}
+          #     port: ${PORT}
