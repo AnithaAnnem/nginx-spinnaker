@@ -13,14 +13,4 @@ READINESS_PATH: /healthz
 LIVENESS_PATH: /livez
 SERVICE_TYPE: LoadBalancer
 SERVICE_PORT: 80
-HOST: cloudninja.liveAPP_NAME: nginx
-REPLICAS_DEV: 1
-REPLICAS_PROD: 3
-CPU_REQUEST: 100m
-CPU_LIMIT: 200m
-MEMORY_REQUEST: 128Mi
-MEMORY_LIMIT: 256Mi
-IMAGE: nginx
-TAG: 1.25-alpine
-PORT: 80
-HOST: nginx.example.com
+HOST: cloudninja.live
