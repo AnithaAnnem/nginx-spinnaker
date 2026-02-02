@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${parameters.APP_NAME}
+  name: ${APP_NAME}
 spec:
-  replicas: ${parameters.REPLICAS_DEV}
+  replicas: ${REPLICAS_DEV}
