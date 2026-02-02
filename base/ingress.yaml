@@ -2,56 +2,13 @@
 # kind: Ingress
 # metadata:
 #   name: nginx-ingress
-#   annotations:
-#     kubernetes.io/ingress.class: nginx
-# spec:
-#   rules:
-#     - host: $(APP_NAME).example.com
-#       http:
-#         paths:
-#           - path: /
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: $(APP_NAME)
-#                 port:
-#                   number: $(PORT)
-
-
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: nginx-ingress
-  namespace: spinnaker
-  annotations:
-    kubernetes.io/ingress.class: nginx
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: cloudninja.live
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: nginx
-                port:
-                  number: 80
-
-                  
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: nginx-ingress
 #   namespace: spinnaker
 #   annotations:
 #     kubernetes.io/ingress.class: nginx
 # spec:
 #   ingressClassName: nginx
 #   rules:
-#     - host: ab6c8cfe4547c4148879c9dc2d1fc34b-1475848864.us-east-1.elb.amazonaws.com
+#     - host: cloudninja.live
 #       http:
 #         paths:
 #           - path: /
@@ -61,3 +18,23 @@ spec:
 #                 name: nginx
 #                 port:
 #                   number: 80
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${parameters.APP_NAME}-ingress
+  namespace: ${parameters.NAMESPACE}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: ${parameters.HOST}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${parameters.APP_NAME}
+            port:
+              number: ${parameters.SERVICE_PORT}                
