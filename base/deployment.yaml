@@ -1,67 +1,39 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: ${APP_NAME}
-#   labels:
-#     app: ${APP_NAME}
-# spec:
-#   replicas: ${REPLICAS_DEV}
-#   selector:
-#     matchLabels:
-#       app: ${APP_NAME}
-#   template:
-#     metadata:
-#       labels:
-#         app: ${APP_NAME}
-#     spec:
-#       containers:
-#         - name: ${APP_NAME}
-#           image: ${IMAGE}:${TAG}
-#           ports:
-#             - name: http
-#               containerPort: ${PORT}
-#           resources:
-#             requests:
-#               cpu: ${CPU_REQUEST}
-#               memory: ${MEMORY_REQUEST}
-#             limits:
-#               cpu: ${CPU_LIMIT}
-#               memory: ${MEMORY_LIMIT}
-#           # readinessProbe:
-#           #   httpGet:
-#           #     path: ${READINESS_PATH}
-#           #     port: ${PORT}
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${execution.variables.APP_NAME}
+  name: ${APP_NAME}
   labels:
-    app: ${execution.variables.APP_NAME}
+    app: ${APP_NAME}
 spec:
-  replicas: ${#toInt(execution.variables.REPLICAS_DEV)}
+  replicas: ${REPLICAS_DEV}
   selector:
     matchLabels:
-      app: ${execution.variables.APP_NAME}
+      app: ${APP_NAME}
   template:
     metadata:
       labels:
-        app: ${execution.variables.APP_NAME}
+        app: ${APP_NAME}
     spec:
       containers:
-      - name: ${execution.variables.APP_NAME}
-        image: ${execution.variables.IMAGE}:${execution.variables.TAG}
-        ports:
-        - containerPort: ${#toInt(execution.variables.PORT)}
-        resources:
-          requests:
-            cpu: ${execution.variables.CPU_REQUEST}
-            memory: ${execution.variables.MEMORY_REQUEST}
-          limits:
-            cpu: ${execution.variables.CPU_LIMIT}
-            memory: ${execution.variables.MEMORY_LIMIT}
+        - name: ${APP_NAME}
+          image: ${IMAGE}:${TAG}
+          ports:
+            - name: http
+              containerPort: ${PORT}
+          resources:
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
+          # readinessProbe:
+          #   httpGet:
+          #     path: ${READINESS_PATH}
+          #     port: ${PORT}
 
-#           # livenessProbe:
-#           #   httpGet:
-#           #     path: ${LIVENESS_PATH}
-#           #     port: ${PORT}
+
+          # livenessProbe:
+          #   httpGet:
+          #     path: ${LIVENESS_PATH}
+          #     port: ${PORT}
