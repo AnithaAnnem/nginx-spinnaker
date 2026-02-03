@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${APP_NAME}
+  name: nginx
   labels:
     app: ${APP_NAME}
 spec:
